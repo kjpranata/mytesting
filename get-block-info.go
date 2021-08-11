@@ -17,7 +17,7 @@ const (
 )
 
 func main() {
-	//Write Full Arcturus Log
+	// Write Full Arcturus Log
 	arcturus()
 
 	//Write Full Betelgeuse Log
@@ -63,8 +63,10 @@ func arcturus() {
 		}
 
 		for _, transaction := range transactions {
-			f.WriteString("\n" + height.String())
-			f.WriteString(transaction.String())
+			if transaction.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI" {
+				f.WriteString("\n" + height.String())
+				f.WriteString(transaction.String())
+			}
 		}
 
 		height++
@@ -111,8 +113,10 @@ func betelgeuse() {
 		}
 
 		for _, transaction := range transactions {
-			f.WriteString("\n" + height.String())
-			f.WriteString(transaction.String())
+			if transaction.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI" {
+				f.WriteString("\n" + height.String())
+				f.WriteString(transaction.String())
+			}
 		}
 
 		height++
