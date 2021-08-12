@@ -14,7 +14,12 @@ const (
 	// Sirius api rest server
 	baseUrlArcturus   = "http://arcturus.xpxsirius.io:3000"
 	baseUrlBetelgeuse = "http://betelgeuse.xpxsirius.io:3000"
+	forkHeight        = sdk.Height(3840000)
 )
+
+var ignoreAddress = map[string]string{
+	"XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI": "Patrick",
+}
 
 func main() {
 	// Write Full Arcturus Log
@@ -42,7 +47,6 @@ func arcturus() {
 	}
 
 	// height of block in blockchain
-	height := sdk.Height(3840000)
 
 	duration := time.Duration(50) * time.Millisecond
 
@@ -53,8 +57,7 @@ func arcturus() {
 	}
 	defer f.Close()
 
-	for height < cur_height {
-
+	for height := cur_height; height > forkHeight; height-- {
 		// Get TransactionInfo's by block height
 		transactions, err2 := client.Blockchain.GetBlockTransactions(context.Background(), height)
 		if err2 != nil {
@@ -62,14 +65,19 @@ func arcturus() {
 			return
 		}
 
-		for _, transaction := range transactions {
-			if transaction.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI" {
-				f.WriteString("\n" + height.String())
-				f.WriteString(transaction.String())
+		fmt.Printf("Getting txn at %v height\n", height)
+		if len(transactions) > 0 {
+			// f.WriteString(height.String() + "\n")
+			for _, transaction := range transactions {
+				_, ignore := ignoreAddress[transaction.GetAbstractTransaction().Signer.Address.Address]
+				// if transaction.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI" {
+				if !ignore {
+					fmt.Printf("Txn hash found: %v\n", transaction.GetAbstractTransaction().TransactionHash)
+					f.WriteString("\t" + transaction.GetAbstractTransaction().TransactionHash.String() + "\n")
+				}
 			}
 		}
 
-		height++
 		time.Sleep(duration)
 	}
 }
