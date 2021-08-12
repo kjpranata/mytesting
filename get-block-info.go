@@ -22,6 +22,9 @@ func main() {
 
 	//Write Full Betelgeuse Log
 	betelgeuse()
+
+	//Write Duplicate Log
+	duplicate()
 }
 
 func arcturus() {
