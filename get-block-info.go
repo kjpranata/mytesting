@@ -123,3 +123,78 @@ func betelgeuse() {
 		time.Sleep(duration)
 	}
 }
+
+func duplicate() {
+	confA, err := sdk.NewConfig(context.Background(), []string{baseUrlArcturus})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
+
+	confB, err2 := sdk.NewConfig(context.Background(), []string{baseUrlBetelgeuse})
+	if err2 != nil {
+		fmt.Printf("NewConfig returned error: %s", err2)
+		return
+	}
+
+	// Use the default http client
+	clientArcturus := sdk.NewClient(nil, confA)
+	clientBetelgeuse := sdk.NewClient(nil, confB)
+
+	// //get current height Arcturus
+	// cur_height_a, err3 := clientArcturus.Blockchain.GetBlockchainHeight(context.Background())
+	// if err3 != nil {
+	// 	fmt.Printf("Blockchain.GetBlockhainHeight returned error: %s", err3)
+	// 	return
+	// }
+
+	// fmt.Println(cur_height_a)
+
+	// //get current height Betelgeus
+	// cur_height_b, err4 := clientBetelgeuse.Blockchain.GetBlockchainHeight(context.Background())
+	// if err4 != nil {
+	// 	fmt.Printf("Blockchain.GetBlockhainHeight returned error: %s", err4)
+	// 	return
+	// }
+
+	// fmt.Println(cur_height_b)
+
+	// height of block in blockchain
+	height := sdk.Height(3840000)
+
+	duration := time.Duration(50) * time.Millisecond
+
+	// create files
+	f, err5 := os.Create("Duplicate.txt")
+	if err5 != nil {
+		log.Fatal(err5)
+	}
+
+	defer f.Close()
+
+	for height < 3860000 {
+		transactionsA, err6 := clientArcturus.Blockchain.GetBlockTransactions(context.Background(), height)
+		if err6 != nil {
+			fmt.Printf("Blockchain.GetBlockTransactions returned error: %s", err6)
+			return
+		}
+
+		transactionsB, err7 := clientBetelgeuse.Blockchain.GetBlockTransactions(context.Background(), height)
+		if err7 != nil {
+			fmt.Printf("Blockchain.GetBlockTransactions returned error: %s", err7)
+			return
+		}
+
+		for _, transactionA := range transactionsA {
+			for _, transactionB := range transactionsB {
+				if transactionA.GetAbstractTransaction().TransactionHash == transactionB.GetAbstractTransaction().TransactionHash {
+					f.WriteString(transactionA.String())
+					f.WriteString(transactionB.String())
+				}
+			}
+		}
+
+		height++
+		time.Sleep(duration)
+	}
+}
