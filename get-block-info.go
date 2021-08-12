@@ -164,6 +164,7 @@ func duplicate() {
 
 	// height of block in blockchain
 	height := sdk.Height(3840000)
+	// height := sdk.Height(3846912)
 
 	duration := time.Duration(50) * time.Millisecond
 
@@ -189,10 +190,15 @@ func duplicate() {
 		}
 
 		for _, transactionA := range transactionsA {
-			for _, transactionB := range transactionsB {
-				if transactionA.GetAbstractTransaction().TransactionHash == transactionB.GetAbstractTransaction().TransactionHash {
-					f.WriteString(transactionA.String())
-					f.WriteString(transactionB.String())
+			if transactionA.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI"{
+				for _, transactionB := range transactionsB {
+					if transactionB.GetAbstractTransaction().Signer.Address.Address != "XDUYWYA5J7L4GBHOU34IXWVSBGEIWPB4ZHBVJKSI" {
+						if transactionA.GetAbstractTransaction().TransactionHash == transactionB.GetAbstractTransaction().TransactionHash {
+							f.WriteString(height.String())
+							f.WriteString("A" + transactionA.String())
+							f.WriteString("B" + transactionB.String())
+						}
+					}
 				}
 			}
 		}
