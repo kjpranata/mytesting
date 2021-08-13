@@ -9,10 +9,9 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrlA   = "http://arcturus.xpxsirius.io:3000"
-	baseUrlB   = "http://betelgeuse.xpxsirius.io:3000"
-	baseUrlC   = "http://bigcalvin.xpxsirius.io:3000"
-	forkHeight = sdk.Height(3840000)
+	baseUrlA = "http://arcturus.xpxsirius.io:3000"
+	baseUrlB = "http://betelgeuse.xpxsirius.io:3000"
+	baseUrlC = "http://bigcalvin.xpxsirius.io:3000"
 )
 
 var clientA *sdk.Client
