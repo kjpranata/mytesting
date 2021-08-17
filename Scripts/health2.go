@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
@@ -12,33 +13,38 @@ const (
 	baseUrlA = "http://arcturus.xpxsirius.io:3000"
 	baseUrlB = "http://betelgeuse.xpxsirius.io:3000"
 	baseUrlC = "http://bigcalvin.xpxsirius.io:3000"
+	baseUrlD = "a"
+	baseUrlE = "a"
+	baseUrlF = "a"
+	baseUrlG = "a"
+	baseUrlH = "a"
 )
 
 var clientA *sdk.Client
 var clientB *sdk.Client
 var clientC *sdk.Client
+
+// var clientD *sdk.Client
+// var clientE *sdk.Client
+// var clientF *sdk.Client
+// var clientG *sdk.Client
+// var clientH *sdk.Client
 var conf *sdk.Config
 
 func init() {
+	//serverArr := [8]string{baseUrlA, baseUrlB, baseUrlC, baseUrlD, baseUrlE, baseUrlF, baseUrlG, baseUrlH}
+	serverArr := [8]string{baseUrlA, baseUrlB, baseUrlC}
+	// clientArr := [8]string{clientA, clientB, clientC, clientD, clientE, clientF, clientG, clientH}
+	clientArr := [8]string{clientA, clientB, clientC}
 	var err error
 
-	conf, err = sdk.NewConfig(context.Background(), []string{baseUrlA})
-	if err != nil {
-		panic(err)
+	for i := 0; i < len(serverArr)-1; i++ {
+		conf, err = sdk.NewConfig(context.Background(), []string{severArr[i]})
+		if err != nil {
+			panic(err)
+		}
+		clientArr[i] = sdk.NewClient(nil, conf)
 	}
-	clientA = sdk.NewClient(nil, conf)
-
-	conf, err = sdk.NewConfig(context.Background(), []string{baseUrlB})
-	if err != nil {
-		panic(err)
-	}
-	clientB = sdk.NewClient(nil, conf)
-
-	conf, err = sdk.NewConfig(context.Background(), []string{baseUrlC})
-	if err != nil {
-		panic(err)
-	}
-	clientC = sdk.NewClient(nil, conf)
 }
 
 func main() {
@@ -96,5 +102,7 @@ func main() {
 			break
 		}
 		height--
+
+		time.Sleep(60 * time.Second)
 	}
 }
