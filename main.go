@@ -113,7 +113,10 @@ func main() {
 			Red := "\033[31m"
 			Reset := "\033[0m"
 			fmt.Println(string(Red), "Chain Forked! Sending Alarm Now!", string(Reset))
-			break
+			// break
+
+			//comment this and uncomment break for proper working
+			time.Sleep(time.Duration(config.Sleep) * time.Second)
 		} else {
 			time.Sleep(time.Duration(config.Sleep) * time.Second)
 		}
