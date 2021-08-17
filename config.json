@@ -12,5 +12,6 @@
   
   "sleep": 30,
   "botApiKey": "1991768584:AAEwzu9nO-PP9R4COnGDOaoia7Nx8wsuaic",
-  "channelID": 1367554670
+  "channelID": 1367554670,
+  "alertMsg" : "BlockChain is Forked in Height : "
 }

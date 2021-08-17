@@ -17,6 +17,7 @@ type Config struct {
 	Sleep        int      `json:"sleep"`
 	Bot          string   `json:"botApiKey"`
 	Id           int64    `json:"channelID"`
+	Alert        string   `json:"alertMsg"`
 }
 
 func configLoader(fileName string) (Config, error) {
@@ -84,7 +85,7 @@ func bot() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	msg := tgbotapi.NewMessage(config.Id, "BlockChain is Forked in Height : "+forkedHeight.String())
+	msg := tgbotapi.NewMessage(config.Id, config.Alert+forkedHeight.String())
 
 	bot.Send(msg)
 
