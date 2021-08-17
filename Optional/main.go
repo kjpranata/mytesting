@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 	"os"
 )
 
@@ -30,7 +32,19 @@ func configLoader(fileName string) (Config, error) {
 	return config, err
 }
 
-func 
+var client []*sdk.Client
+var conf []*sdk.Config
+
+func init() {
+	var err error
+	config, _ := configLoader("config.json")
+
+	conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes.Acturus})
+	if err != nil {
+		panic(err)
+	}
+	client[0] = sdk.NewClient(nil, conf[0])
+}
 
 func main() {
 	config, _ := configLoader("config.json")
