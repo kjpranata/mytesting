@@ -4,16 +4,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"log"
 	"os"
 	"time"
-
-	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 type Config struct {
-	ApiNodes []string `json:"apiNodes"`
-	Sleep    int      `json:"sleep"`
-	Bot      string   `json:"botApiKey"`
+	ApiNodes     []string `json:"apiNodes"`
+	ApiNodesName []string `json:"apiNodesName"`
+	Sleep        int      `json:"sleep"`
+	Bot          string   `json:"botApiKey"`
+	Id           int64    `json:"channelID"`
 }
 
 func configLoader(fileName string) (Config, error) {
@@ -33,6 +36,7 @@ func configLoader(fileName string) (Config, error) {
 var client []*sdk.Client
 var conf *sdk.Config
 var height sdk.Height
+var forkedHeight *sdk.Height
 
 func init() {
 	config, _ := configLoader("config.json")
@@ -66,6 +70,27 @@ func getHeight() {
 	}
 }
 
+func bot() {
+	config, _ := configLoader("config.json")
+
+	bot, err := tgbotapi.NewBotAPI(config.Bot)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	bot.Debug = true
+
+	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+
+	msg := tgbotapi.NewMessage(config.Id, "BlockChain is Forked in Height : "+forkedHeight.String())
+
+	bot.Send(msg)
+
+}
+
 func main() {
 	config, _ := configLoader("config.json")
 	getHeight()
@@ -84,19 +109,10 @@ func main() {
 		}
 
 		for i := 0; i < len(blocks); i++ {
-			switch i {
-			case 0:
-				fmt.Println("Block Height:", height)
-				fmt.Println("Block Aldebaran Hash  :", blocks[i].BlockHash)
-			case 1:
-				fmt.Println("Block Arcturus Hash   :", blocks[i].BlockHash)
-			case 2:
-				fmt.Println("Block Betelgeuse Hash :", blocks[i].BlockHash)
-			case 3:
-				fmt.Println("Block BigCalvin Hash  :", blocks[i].BlockHash)
-			default:
+			if i == 0 {
+				fmt.Println("Block Height :", height)
 			}
-
+			fmt.Println("Block "+config.ApiNodesName[i]+" Hash :", blocks[i].BlockHash)
 			hashes = append(hashes, blocks[i].BlockHash)
 		}
 
@@ -113,6 +129,10 @@ func main() {
 			Red := "\033[31m"
 			Reset := "\033[0m"
 			fmt.Println(string(Red), "Chain Forked! Sending Alarm Now!", string(Reset))
+			forkedHeight = &height
+
+			// fmt.Println(config.Id)
+			bot()
 			// break
 
 			//comment this and uncomment break for proper working

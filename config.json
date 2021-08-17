@@ -5,6 +5,12 @@
     "http://betelgeuse.xpxsirius.io:3000",
     "http://bigcalvin.xpxsirius.io:3000"
   ],
+
+  "apiNodesName":[
+    "Aldebaran","Acturus","Betelgeuse","Big Calvin"
+  ],
+  
   "sleep": 30,
-  "botApiKey": "<telegram_bot_api_key>"
+  "botApiKey": "1991768584:AAEwzu9nO-PP9R4COnGDOaoia7Nx8wsuaic",
+  "channelID": 1367554670
 }

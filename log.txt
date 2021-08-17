@@ -1,0 +1,24 @@
+Block Height: 3898322
+Block Aldebaran Hash  : 258839a4f72a0019f3068d41cf63def64da75d682981c93e0e5a295b9c2e0b5d
+Block Arcturus Hash   : 258839a4f72a0019f3068d41cf63def64da75d682981c93e0e5a295b9c2e0b5d
+Block Betelgeuse Hash : 77e2d7b05bf9f1ca66fddee5a83e4f04d473f395b7f3bc97f3e7eb73980220f9
+Block BigCalvin Hash  : 258839a4f72a0019f3068d41cf63def64da75d682981c93e0e5a295b9c2e0b5d
+[31m Chain Forked! Sending Alarm Now! [0m
+Block Height: 3898323
+Block Aldebaran Hash  : 926b8c0f326d5ec0566c3ecf037bf8fb8174cba8cd5b94539515df304257ec78
+Block Arcturus Hash   : 926b8c0f326d5ec0566c3ecf037bf8fb8174cba8cd5b94539515df304257ec78
+Block Betelgeuse Hash : d147c31e15c2eb9a5eb6beca0d906d931843dd2e7466e1da8a78149c4d83cb68
+Block BigCalvin Hash  : 926b8c0f326d5ec0566c3ecf037bf8fb8174cba8cd5b94539515df304257ec78
+[31m Chain Forked! Sending Alarm Now! [0m
+Block Height: 3898324
+Block Aldebaran Hash  : e22196db2f90f684bd4adc1e58a17af49ecc5cc895cc5705c547dffa32a9543d
+Block Arcturus Hash   : e22196db2f90f684bd4adc1e58a17af49ecc5cc895cc5705c547dffa32a9543d
+Block Betelgeuse Hash : 1c0193b9845262b3d2a12f62992288da738d9a440d77f9f257779d57352302f5
+Block BigCalvin Hash  : e22196db2f90f684bd4adc1e58a17af49ecc5cc895cc5705c547dffa32a9543d
+[31m Chain Forked! Sending Alarm Now! [0m
+Block Height: 3898325
+Block Aldebaran Hash  : 7c8e693c3894349dde276254a7f8e47c0bd3767e3da73078484ee6211feea479
+Block Arcturus Hash   : 7c8e693c3894349dde276254a7f8e47c0bd3767e3da73078484ee6211feea479
+Block Betelgeuse Hash : 937c3d8a19736933d75ff8c063efd82b9f05ce4e806492f717f7aadbcb55b139
+Block BigCalvin Hash  : 7c8e693c3894349dde276254a7f8e47c0bd3767e3da73078484ee6211feea479
+[31m Chain Forked! Sending Alarm Now! [0m
