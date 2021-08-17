@@ -1,0 +1,7 @@
+{
+    "api_nodes" : [ 
+        "http://arcturus.xpxsirius.io:3000",
+        "http://aldebaran.xpxsirius.io:3000",
+        "http://bigcalvin.xpxsirius.io:3000"
+      ]
+}
