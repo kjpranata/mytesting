@@ -21,7 +21,6 @@ type Config struct {
 
 func configLoader(fileName string) (Config, error) {
 	var config Config
-	//Open File and Load it
 	configFile, err := os.Open("config.json")
 	if err != nil {
 		return config, err
@@ -130,12 +129,11 @@ func main() {
 			Reset := "\033[0m"
 			fmt.Println(string(Red), "Chain Forked! Sending Alarm Now!", string(Reset))
 			forkedHeight = &height
-
-			// fmt.Println(config.Id)
 			bot()
 			// break
 
 			//comment this and uncomment break for proper working
+			//I comment the break because Betelgeuse always have different hash, so it would directly stop if not commented
 			time.Sleep(time.Duration(config.Sleep) * time.Second)
 		} else {
 			time.Sleep(time.Duration(config.Sleep) * time.Second)
