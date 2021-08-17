@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"context"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -42,14 +41,15 @@ func init() {
 			panic(err)
 		}
 		client[i] = sdk.NewClient(nil, conf[i])
+		fmt.Printf(config.ApiNodes[i] + "\n")
 	}
 }
 
 func main() {
-	config, _ := configLoader("config.json")
-	fmt.Println("Acturus: " + config.ApiNodes[0])
-	fmt.Println("Aldebaran: " + config.ApiNodes[1])
-	fmt.Println("Big Calvin: " + config.ApiNodes[2])
-	fmt.Println("Bot: " + config.Bot)
-	fmt.Println("Sleep: ", config.Sleep)
+	// config, _ := configLoader("config.json")
+	// fmt.Println("Acturus: " + config.ApiNodes[0])
+	// fmt.Println("Aldebaran: " + config.ApiNodes[1])
+	// fmt.Println("Big Calvin: " + config.ApiNodes[2])
+	// fmt.Println("Bot: " + config.Bot)
+	// fmt.Println("Sleep: ", config.Sleep)
 }
