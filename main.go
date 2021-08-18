@@ -8,16 +8,18 @@ import (
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
 type Config struct {
-	ApiNodes     []string `json:"apiNodes"`
-	ApiNodesName []string `json:"apiNodesName"`
-	Sleep        int      `json:"sleep"`
-	Bot          string   `json:"botApiKey"`
-	Id           int64    `json:"channelID"`
-	Alert        string   `json:"alertMsg"`
+	ApiNodes     []string    `json:"apiNodes"`
+	ApiNodesName []string    `json:"apiNodesName"`
+	Sleep        int         `json:"sleep"`
+	Bot          string      `json:"botApiKey"`
+	Id           int64       `json:"channelID"`
+	Alert        string      `json:"alertMsg"`
+	Sync         *sdk.Height `json:"syncValue"`
 }
 
 func configLoader(fileName string) (Config, error) {
@@ -34,6 +36,7 @@ func configLoader(fileName string) (Config, error) {
 }
 
 var client []*sdk.Client
+var clientTemp []*sdk.Client
 var conf *sdk.Config
 var height sdk.Height
 var forkedHeight *sdk.Height
@@ -42,12 +45,32 @@ func init() {
 	config, _ := configLoader("config.json")
 
 	var err error
-	for i := 0; i < len(config.ApiNodes); i++ {
+	bcHeightTemp := []*sdk.Height{}
+	i := 0
+
+	for i < len(config.ApiNodes) {
 		conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes[i]})
 		if err != nil {
-			panic(err)
+			//panic(err)
+			fmt.Println(config.ApiNodesName[i] + " is Offline.")
+		} else {
+			clientTemp = append(clientTemp, sdk.NewClient(nil, conf))
+
+			bcHeight, err := clientTemp[i].Blockchain.GetBlockchainHeight(context.Background())
+			if err != nil {
+				panic(err)
+			}
+			bcHeightTemp = append(bcHeightTemp, &bcHeight)
+			// fmt.Println(bcHeightTemp[i])
+
 		}
-		client = append(client, sdk.NewClient(nil, conf))
+		i++
+	}
+
+	for i = 0; i < len(bcHeightTemp)-1; i++ {
+		if bcHeightTemp[i] > config.Sync {
+
+		}
 	}
 }
 
@@ -62,7 +85,6 @@ func getHeight() {
 	}
 
 	height = heights[0]
-
 	for i := 0; i < len(heights); i++ {
 		if height > heights[i] {
 			height = heights[i]
