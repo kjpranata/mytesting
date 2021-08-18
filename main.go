@@ -8,7 +8,6 @@ import (
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 	"log"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -45,33 +44,40 @@ func init() {
 	config, _ := configLoader("config.json")
 
 	var err error
-	bcHeightTemp := []*sdk.Height{}
+	//This line is my testing for checking sync height
+	// bcHeightTemp := []*sdk.Height{}
 	i := 0
 
 	for i < len(config.ApiNodes) {
 		conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes[i]})
 		if err != nil {
-			//panic(err)
 			fmt.Println(config.ApiNodesName[i] + " is Offline.")
 		} else {
-			clientTemp = append(clientTemp, sdk.NewClient(nil, conf))
+			client = append(client, sdk.NewClient(nil, conf))
 
-			bcHeight, err := clientTemp[i].Blockchain.GetBlockchainHeight(context.Background())
-			if err != nil {
-				panic(err)
-			}
-			bcHeightTemp = append(bcHeightTemp, &bcHeight)
-			// fmt.Println(bcHeightTemp[i])
-
+			//This line is my testing for checking sync height
+			// bcHeight, err := clientTemp[i].Blockchain.GetBlockchainHeight(context.Background())
+			// if err != nil {
+			// 	panic(err)
+			// }
+			// bcHeightTemp = append(bcHeightTemp, &bcHeight)
 		}
 		i++
 	}
 
-	for i = 0; i < len(bcHeightTemp)-1; i++ {
-		if bcHeightTemp[i] > config.Sync {
+	//This line is my testing for checking sync height
+	// for i = 0; i < len(clientTemp)-1; i++ {
+	// 	syncTest := *bcHeightTemp[i] - *bcHeightTemp[i+1]
+	// 	if syncTest > *config.Sync && syncTest > 0 {
+	// 		conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes[i]})
+	// 		if err != nil {
+	// 			panic(err)
+	// 		}
+	// 		client = append(clientTemp, sdk.NewClient(nil, conf))
+	// 	}
 
-		}
-	}
+	// 	// fmt.Println("Test")
+	// }
 }
 
 func getHeight() {
