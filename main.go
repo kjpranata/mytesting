@@ -36,48 +36,50 @@ func configLoader(fileName string) (Config, error) {
 
 var client []*sdk.Client
 var clientTemp []*sdk.Client
+var apiName []string
 var conf *sdk.Config
 var height sdk.Height
 var forkedHeight *sdk.Height
 
 func init() {
 	config, _ := configLoader("config.json")
-
 	var err error
-	//This line is my testing for checking sync height
-	// bcHeightTemp := []*sdk.Height{}
+	bcHeightTemp := []*sdk.Height{}
+	apiNameTemp := []string{}
 	i := 0
+	j := 0
 
 	for i < len(config.ApiNodes) {
 		conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes[i]})
 		if err != nil {
 			fmt.Println(config.ApiNodesName[i] + " is Offline.")
 		} else {
-			client = append(client, sdk.NewClient(nil, conf))
-
-			//This line is my testing for checking sync height
-			// bcHeight, err := clientTemp[i].Blockchain.GetBlockchainHeight(context.Background())
-			// if err != nil {
-			// 	panic(err)
-			// }
-			// bcHeightTemp = append(bcHeightTemp, &bcHeight)
+			clientTemp = append(clientTemp, sdk.NewClient(nil, conf))
+			bcHeight, err := clientTemp[j].Blockchain.GetBlockchainHeight(context.Background())
+			if err != nil {
+				panic(err)
+			}
+			bcHeightTemp = append(bcHeightTemp, &bcHeight)
+			apiNameTemp = append(apiNameTemp, config.ApiNodesName[i])
+			j++
 		}
 		i++
 	}
 
-	//This line is my testing for checking sync height
-	// for i = 0; i < len(clientTemp)-1; i++ {
-	// 	syncTest := *bcHeightTemp[i] - *bcHeightTemp[i+1]
-	// 	if syncTest > *config.Sync && syncTest > 0 {
-	// 		conf, err = sdk.NewConfig(context.Background(), []string{config.ApiNodes[i]})
-	// 		if err != nil {
-	// 			panic(err)
-	// 		}
-	// 		client = append(clientTemp, sdk.NewClient(nil, conf))
-	// 	}
+	heightHigh := *bcHeightTemp[0]
+	for i := 0; i < len(bcHeightTemp); i++ {
+		if heightHigh < *bcHeightTemp[i] {
+			heightHigh = *bcHeightTemp[i]
+		}
+	}
 
-	// 	// fmt.Println("Test")
-	// }
+	for i = 0; i < len(bcHeightTemp); i++ {
+		syncTest := heightHigh - *bcHeightTemp[i]
+		if syncTest < *config.Sync {
+			client = append(client, clientTemp[i])
+			apiName = append(apiName, apiNameTemp[i])
+		}
+	}
 }
 
 func getHeight() {
@@ -140,7 +142,7 @@ func main() {
 			if i == 0 {
 				fmt.Println("Block Height :", height)
 			}
-			fmt.Println("Block "+config.ApiNodesName[i]+" Hash :", blocks[i].BlockHash)
+			fmt.Println("Block "+apiName[i]+" Hash :", blocks[i].BlockHash)
 			hashes = append(hashes, blocks[i].BlockHash)
 		}
 
