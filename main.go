@@ -19,6 +19,7 @@ type Config struct {
 	Id           int64       `json:"channelID"`
 	Alert        string      `json:"alertMsg"`
 	Sync         *sdk.Height `json:"syncValue"`
+	Final        *sdk.Height `json:"finalHeight"`
 }
 
 func configLoader(fileName string) (Config, error) {
@@ -39,7 +40,8 @@ var clientTemp []*sdk.Client
 var apiName []string
 var conf *sdk.Config
 var height sdk.Height
-var forkedHeight *sdk.Height
+var finalHeight sdk.Height
+var forkedHeight sdk.Height
 
 func init() {
 	config, _ := configLoader("config.json")
@@ -83,6 +85,7 @@ func init() {
 }
 
 func getHeight() {
+	config, _ := configLoader("config.json")
 	heights := []sdk.Height{}
 	for i := 0; i < len(client); i++ {
 		bcheight, err := client[i].Blockchain.GetBlockchainHeight(context.Background())
@@ -98,6 +101,7 @@ func getHeight() {
 			height = heights[i]
 		}
 	}
+	finalHeight = height - *config.Final
 }
 
 func bot() {
@@ -115,10 +119,9 @@ func bot() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	msg := tgbotapi.NewMessage(config.Id, config.Alert+forkedHeight.String())
+	msg := tgbotapi.NewMessage(config.Id, "Current Height : "+height.String()+"\n"+config.Alert+forkedHeight.String())
 
 	bot.Send(msg)
-
 }
 
 func main() {
@@ -131,7 +134,7 @@ func main() {
 		var fork bool
 
 		for i := 0; i < len(client); i++ {
-			block, err := client[i].Blockchain.GetBlockByHeight(context.Background(), height)
+			block, err := client[i].Blockchain.GetBlockByHeight(context.Background(), finalHeight)
 			if err != nil {
 				panic(err)
 			}
@@ -140,7 +143,8 @@ func main() {
 
 		for i := 0; i < len(blocks); i++ {
 			if i == 0 {
-				fmt.Println("Block Height :", height)
+				fmt.Println("Current Block Height :", height)
+				fmt.Println("Final Block Height :", finalHeight)
 			}
 			fmt.Println("Block "+apiName[i]+" Hash :", blocks[i].BlockHash)
 			hashes = append(hashes, blocks[i].BlockHash)
@@ -159,8 +163,9 @@ func main() {
 			Red := "\033[31m"
 			Reset := "\033[0m"
 			fmt.Println(string(Red), "Chain Forked! Sending Alarm Now!", string(Reset))
-			forkedHeight = &height
+			forkedHeight = finalHeight
 			bot()
+			fmt.Println(string(Red), "Alert Sent.", string(Reset))
 			// break
 
 			//comment this and uncomment break for proper working
@@ -171,5 +176,6 @@ func main() {
 		}
 
 		height++
+		finalHeight++
 	}
 }
