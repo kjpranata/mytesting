@@ -27,7 +27,6 @@ namespace xpx_chain_sdk::tests {
         std::unique_ptr<TransferTransaction> transferTransaction = CreateTransferTransaction(recipient, mosaics, message);
         account->signTransaction(transferTransaction.get());
 
-        //Taken from Transaction, not Modified yet
         bool isReceived = false;
         std::mutex receivedMutex;
         std::unique_lock<std::mutex> lock(receivedMutex);
@@ -69,7 +68,6 @@ namespace xpx_chain_sdk::tests {
     //     std::unique_ptr<TransferTransaction> transferTransaction = CreateTransferTransaction(recipient, mosaics, message);
     //     account->signTransaction(transferTransaction.get());
 
-    //     //Taken from Transaction, not Modified yet
     //     bool isReceived = false;
     //     std::mutex receivedMutex;
     //     std::unique_lock<std::mutex> lock(receivedMutex);
@@ -111,7 +109,6 @@ namespace xpx_chain_sdk::tests {
         std::unique_ptr<TransferTransaction> transferTransaction = CreateTransferTransaction(recipient, mosaics, message);
         account->signTransaction(transferTransaction.get());
 
-        //Taken from Transaction, not Modified yet
         bool isReceived = false;s
         std::mutex receivedMutex;
         std::unique_lock<std::mutex> lock(receivedMutex);
